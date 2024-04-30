@@ -4,14 +4,14 @@ if(isset($_POST['insert_brand'])){
     $brand_title=$_POST['brand_title'];
 
     // select data from database 
-    $select_query="Select * from 'brands' where brand_title='$brand_title'";
+    $select_query="Select * from `brands` where brand_title='$brand_title'";
     $result_select=mysqli_query($con,$select_query);
     $number=mysqli_num_rows($result_select);
     if($number>0){
         echo "<script>alert('This Brand is prestent inside the database')</script>";
     }else{
 
-    $insert_query="insert into 'brands' (brand_title) values ('$brand_title')";
+    $insert_query="insert into `brands` (brand_title) values ('$brand_title')";
     $result=mysqli_query($con,$insert_query);
     if($result){
         echo "<script>alert('Brand has been inserted successfully')</script>";
