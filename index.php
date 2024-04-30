@@ -1,6 +1,8 @@
 <!-- connenct file -->
 <?php 
 include('includes/connect.php');
+include('functions/common_function.php');
+session_start();
 
 ?>
 
@@ -17,6 +19,18 @@ include('includes/connect.php');
 
     <!-- CSS File -->
     <link rel="stylesheet" href="style.css">
+
+    <style>
+        body{
+            overflow-x: hidden;
+        }
+        .banner-img {
+            width: 100%;
+            height: auto;
+        }
+    </style>
+
+
 </head>
 <body>
    <!-- navbar -->
@@ -31,46 +45,85 @@ include('includes/connect.php');
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
+          <a class="nav-link active" aria-current="page" href="index.php">Home</a>
         </li>
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="#">Index</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Product</a>
+          <a class="nav-link" href="display_all.php">Product</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Register</a>
-        </li>
+
+        <?php 
+        
+        if(isset($_SESSION['username'])){
+          echo "<li class='nav-item'>
+          <a class='nav-link' href=./users_area/profile.php'>My Account</a>
+          </li>";
+        }else{
+          echo "<li class='nav-item'>
+          <a class='nav-link' href=./users_area/user_registration.php'>Register</a>
+          </li>";
+        }
+
+        ?>
+
         <li class="nav-item">
           <a class="nav-link" href="#">Contact</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#"><i class="fa-solid fa-cart-arrow-down"></i><sup>1</sup></a>
+          <a class="nav-link" href="cart.php"><i class="fa-solid fa-cart-arrow-down"></i><sup><?php cart_item();?></sup></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Total Price:100/-</a>
+          <a class="nav-link" href="#">Total Price: $<?php total_cart_price();?></a>
         </li>
       </ul>
-      <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-light" type="submit">Search</button>
+      <form class="d-flex" action="search_product.php" method="get">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search_data">
+        <input type="submit" value="Search" class="btn btn-outline-light" name="search_data_product">
+
+
       </form>
     </div>
   </div>
 </nav>
 
+
+
+<!-- calling cart function-->
+<?php 
+cart();
+?>
+
 <!-- Second Child -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
   <ul class="navbar-nav me-auto">
-  <li class="nav-item">
-          <a class="nav-link" href="#">Welcome Guest</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Login</a>
-        </li>
+  
+        <?php
+        if(!isset($_SESSION['username'])){
+          echo "<li class='nav-item'>
+          <a class='nav-link' href='#'>Welcome Guest</a>
+        </li>";
+        }else{
+          echo "<li class='nav-item'>
+          <a class='nav-link' href='./users_area/profile.php'>Welcome ".$_SESSION['username']." </a>
+          </li>";
+        }
+
+
+        if(!isset($_SESSION['username'])){
+          echo "<li class='nav-item'>
+          <a class='nav-link' href='./users_area/user_login.php'>Login</a></li>";
+        }else{
+          echo "<li class='nav-item'>
+          <a class='nav-link' href='./users_area/logout.php'>Logout</a>
+          </li>";
+        }
+        ?>
   </ul>
 </nav>
+
+<img src="https://i.ibb.co/hdC8ppv/Untitled-design-1.png" alt="Banner Image" class="banner-img">
 
 <!-- Third Child -->
 <div class="bd-light">
@@ -79,85 +132,25 @@ include('includes/connect.php');
 </div>
 
 <!-- Fourth Child -->
-<div class="row">
+<div class="row px-1">
   <div class="col-md-10">
     <!-- Products -->
     <div class="row">
-      <div class="col-md-4 mb-2">
-      <div class="card" >
-  <img src="./images/FateStayNightUlimitedCodes.jpg" class="card-img-top" alt="...">
-  <div class="card-body">
-    <h5 class="card-title">Card title</h5>
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    <a href="#" class="btn btn-dark">Add to Cart</a>
-    <a href="#" class="btn btn-secondary">Veiw More</a>
-  </div>
-</div>
-      </div>
 
-      <div class="col-md-4 mb-2">
-      <div class="card" >
-  <img src="./images/DragonBallSparkingZero.jpg" class="card-img-top" alt="...">
-  <div class="card-body">
-    <h5 class="card-title">Card title</h5>
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    <a href="#" class="btn btn-dark">Add to Cart</a>
-    <a href="#" class="btn btn-secondary">Veiw More</a>
-  </div>
-</div>
-      </div>
+    <!-- fetching products -->
+    <?php 
+    //calling function
+    getproducts();
+    get_unique_categories();
+    get_unique_brands();
+    // $ip = getIPAddress();  
+    // echo 'User Real IP Address - '.$ip;
+    ?>
 
-      <div class="col-md-4 mb-2">
-      <div class="card" >
-  <img src="./images/SonicXShadowGenerations.jpg" class="card-img-top" alt="...">
-  <div class="card-body">
-    <h5 class="card-title">Card title</h5>
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    <a href="#" class="btn btn-dark">Add to Cart</a>
-    <a href="#" class="btn btn-secondary">Veiw More</a>
-  </div>
-</div>
-      </div>
-
-      <div class="col-md-4 mb-2">
-      <div class="card" >
-  <img src="./images/Ghost.jpg" class="card-img-top" alt="...">
-  <div class="card-body">
-    <h5 class="card-title">Card title</h5>
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    <a href="#" class="btn btn-dark">Add to Cart</a>
-    <a href="#" class="btn btn-secondary">Veiw More</a>
-  </div>
-</div>
-      </div>
-
-      <div class="col-md-4 mb-2">
-      <div class="card" >
-  <img src="./images/UnderTale.jpg" class="card-img-top" alt="...">
-  <div class="card-body">
-    <h5 class="card-title">Card title</h5>
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    <a href="#" class="btn btn-dark">Add to Cart</a>
-    <a href="#" class="btn btn-secondary">Veiw More</a>
-  </div>
-</div>
-      </div>
-
-      <div class="col-md-4 mb-2">
-      <div class="card" >
-  <img src="./images/DevilMayCry5.jpg" class="card-img-top" alt="...">
-  <div class="card-body">
-    <h5 class="card-title">Card title</h5>
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    <a href="#" class="btn btn-dark">Add to Cart</a>
-    <a href="#" class="btn btn-secondary">Veiw More</a>
-  </div>
-</div>
-      </div>
-
-      
+      <!-- row end -->
 
     </div>
+    <!-- col end -->
   </div>
  
   <!-- Sidenav -->
@@ -169,18 +162,12 @@ include('includes/connect.php');
       </li>
 
       <?php 
-      $select_brands="Select * from 'brands'";
-      $result_brands=mysqli_query($con, $select_brands);
-      //$row_data=mysqli_fetch_assoc($result_brands);
-      //echo $row_data['brand_title'];
-      while($row_data=mysqli_fetch_assoc($result_brands)){
-        $brand_title=$row_data['brand_title'];
-        $brand_id=$row_data['brand_id'];
-        echo "<li class='nav-item'> <a href='index.php?brand=$brand_id' class='nav-link text-light'>$brand_title</a></li>";
-      }
+      //calling brands function
+      getbrands();
       
       ?>
 
+      
     </ul>
     <!-- Categories to be displayed -->
     <ul class="navbar-nav me-auto text-center">
@@ -189,15 +176,7 @@ include('includes/connect.php');
       </li>
 
       <?php 
-      $select_categories="Select * from 'categories'";
-      $result_categories=mysqli_query($con, $select_categories);
-      //$row_data=mysqli_fetch_assoc($result_brands);
-      //echo $row_data['brand_title'];
-      while($row_data=mysqli_fetch_assoc($result_categories)){
-        $category_title=$row_data['category_title'];
-        $category_id=$row_data['category_id'];
-        echo "<li class='nav-item'> <a href='index.php?brand=$category_id' class='nav-link text-light'>$category_title</a></li>";
-      }
+      getcategories();
       
       ?>
 
@@ -208,9 +187,8 @@ include('includes/connect.php');
 
 
 <!-- Last Child -->
-<div class="bg-info p-3 text-center bg-dark text-muted">
-  <p>&copy; 2024 OldNewGen Gaming Center</p>
-</div>
+<!-- include footer -->
+<?php include("./includes/footer.php") ?>
    </div>
 
 
