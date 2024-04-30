@@ -1,3 +1,11 @@
+<!-- connenct file -->
+<?php 
+include('../includes/connect.php');
+include('../functions/common_function.php');
+session_start();
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,6 +32,10 @@
 .footer{
     position: absolute;
     bottom: 0;
+}
+.product_img{
+    width:20%;
+    object-fit: contain;
 }
     </style>
 
@@ -61,8 +73,8 @@
 
             <!-- button*10>a.nav-link.text-light.bg-dark.my-1 -->
             <div class="button text-center">
-                <Button class="my-3"><a href="" class="nav-link text-light bg-dark my-1">Insert Products</a></Button>
-                <Button><a href="" class="nav-link text-light bg-dark my-1">View Products</a></Button>
+                <Button class="my-3"><a href="insert_product.php" class="nav-link text-light bg-dark my-1">Insert Products</a></Button>
+                <Button><a href="index.php?view_products" class="nav-link text-light bg-dark my-1">View Products</a></Button>
                 <Button><a href="index.php?insert_category" class="nav-link text-light bg-dark my-1">Insert Categories</a></Button>
                 <Button><a href="" class="nav-link text-light bg-dark my-1">View Categories</a></Button>
                 <Button><a href="index.php?insert_brand" class="nav-link text-light bg-dark my-1">Insert Brands</a></Button>
@@ -86,13 +98,19 @@
         if(isset($_GET['insert_brand'])){
             include('insert_brands.php');
         }
+        if(isset($_GET['view_products'])){
+            include('view_products.php');
+        }
+        if(isset($_GET['edit_products'])){
+            include('edit_products.php');
+        }
         ?>
 
     </div>
 
     <!-- Last Child -->
-<div class="bg-info p-3 text-center bg-dark text-muted footer">
-  <p>&copy; 2024 OldNewGen Gaming Center</p>
+<div>
+<?php include("../includes/footer.php") ?>
 </div>
 
  </div>
